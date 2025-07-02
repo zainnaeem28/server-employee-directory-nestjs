@@ -2,6 +2,7 @@ import {
   Injectable,
   NotFoundException,
   ConflictException,
+  BadRequestException,
   Logger,
 } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
@@ -164,16 +165,14 @@ export class EmployeesService {
     }
   }
 
-  async create(createEmployeeDto: CreateEmployeeDto): Promise<Employee> {
+  async create(createEmployeeDto: CreateEmployeeDto): Promise<Employee | { error: string }> {
     try {
       // Check if email already exists
       const existingEmployee = await this.employeesRepository.findByEmail(
         createEmployeeDto.email,
       );
       if (existingEmployee) {
-        throw new ConflictException(
-          `Employee with email ${createEmployeeDto.email} already exists`,
-        );
+        return { error: `Employee with email ${createEmployeeDto.email} already exists` };
       }
 
       const employeeData = {
@@ -198,7 +197,7 @@ export class EmployeesService {
   async update(
     id: string,
     updateEmployeeDto: UpdateEmployeeDto,
-  ): Promise<Employee> {
+  ): Promise<Employee | { error: string }> {
     try {
       // Check if employee exists
       const existingEmployee = await this.employeesRepository.findOne(id);
@@ -207,17 +206,10 @@ export class EmployeesService {
       }
 
       // If email is being updated, check for conflicts
-      if (
-        updateEmployeeDto.email &&
-        updateEmployeeDto.email !== existingEmployee.email
-      ) {
-        const emailExists = await this.employeesRepository.findByEmail(
-          updateEmployeeDto.email,
-        );
-        if (emailExists) {
-          throw new ConflictException(
-            `Employee with email ${updateEmployeeDto.email} already exists`,
-          );
+      if (updateEmployeeDto.email) {
+        const emailExists = await this.employeesRepository.findByEmail(updateEmployeeDto.email);
+        if (emailExists && emailExists.id !== id) {
+          return { error: `Employee with email ${updateEmployeeDto.email} already exists` };
         }
       }
 
@@ -234,7 +226,8 @@ export class EmployeesService {
     } catch (error) {
       if (
         error instanceof NotFoundException ||
-        error instanceof ConflictException
+        error instanceof ConflictException ||
+        error instanceof BadRequestException
       ) {
         throw error;
       }

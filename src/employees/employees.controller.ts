@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   Query,
+  Res,
 } from "@nestjs/common";
 import {
   ApiTags,
@@ -23,6 +24,7 @@ import {
   Employee,
   PaginatedEmployees,
 } from "../common/interfaces/employee.interface";
+import { Response } from 'express';
 
 // EmployeesController handles all employee-related API endpoints
 // Includes CRUD operations and filter/search endpoints
@@ -38,8 +40,13 @@ export class EmployeesController {
   @ApiResponse({ status: 400, description: "Bad request" })
   async create(
     @Body() createEmployeeDto: CreateEmployeeDto,
-  ): Promise<Employee> {
-    return this.employeesService.create(createEmployeeDto);
+    @Res() res: Response,
+  ) {
+    const result = await this.employeesService.create(createEmployeeDto);
+    if ('error' in result) {
+      return res.status(200).json(result);
+    }
+    return res.status(201).json(result);
   }
 
   // Get all employees with filters and pagination
@@ -134,8 +141,13 @@ export class EmployeesController {
   async update(
     @Param("id") id: string,
     @Body() updateEmployeeDto: UpdateEmployeeDto,
-  ): Promise<Employee> {
-    return this.employeesService.update(id, updateEmployeeDto);
+    @Res() res: Response,
+  ) {
+    const result = await this.employeesService.update(id, updateEmployeeDto);
+    if ('error' in result) {
+      return res.status(200).json(result);
+    }
+    return res.status(200).json(result);
   }
 
   // Delete employee by ID
