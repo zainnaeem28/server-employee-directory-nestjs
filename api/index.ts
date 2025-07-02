@@ -43,6 +43,25 @@ async function bootstrap() {
       app.useGlobalInterceptors(new LoggingInterceptor());
       app.setGlobalPrefix("api/v1");
 
+      // Add a root route handler
+      app.use("/", (req: any, res: any, next: any) => {
+        if (req.path === "/" && req.method === "GET") {
+          return res.json({
+            message: "Employee Directory API",
+            version: "1.0.0",
+            status: "running",
+            environment: process.env.NODE_ENV || "development",
+            endpoints: {
+              health: "/api/v1/health",
+              employees: "/api/v1/employees",
+              swagger: "/api/docs"
+            },
+            timestamp: new Date().toISOString()
+          });
+        }
+        next();
+      });
+
       const config = new DocumentBuilder()
         .setTitle("Employee Directory API")
         .setDescription("A comprehensive API for managing employee directory")
