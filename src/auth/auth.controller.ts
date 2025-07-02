@@ -4,11 +4,14 @@ import { AuthService } from "./auth.service";
 import { LoginDto } from "./dto/login.dto";
 import { RegisterDto } from "./dto/register.dto";
 
+// AuthController handles authentication endpoints (login, register)
+// Provides JWT-based authentication for users
 @ApiTags("auth")
 @Controller("auth")
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
+  // User login endpoint
   @Post("login")
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: "User login" })
@@ -18,6 +21,7 @@ export class AuthController {
     return this.authService.login(loginDto);
   }
 
+  // User registration endpoint
   @Post("register")
   @ApiOperation({ summary: "User registration" })
   @ApiResponse({ status: 201, description: "Registration successful" })

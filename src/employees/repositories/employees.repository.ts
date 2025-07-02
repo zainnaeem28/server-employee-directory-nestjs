@@ -14,7 +14,8 @@ export class EmployeesRepository {
   async findByFilters(filters: EmployeeFilters): Promise<[Employee[], number]> {
     const queryBuilder = this.repository.createQueryBuilder("employee");
 
-    // Apply filters
+    // Apply filters to the employee query
+    // Each filter narrows down the results based on user input
     if (filters.department) {
       queryBuilder.andWhere(
         "LOWER(employee.department) LIKE LOWER(:department)",
@@ -36,15 +37,40 @@ export class EmployeesRepository {
       });
     }
 
+    // Custom search logic for first and last name
+    // - First word: matches firstName
+    // - Second word (if present): matches lastName
+    // This allows progressive search as the user types
     if (filters.search) {
-      const searchTerm = `%${filters.search}%`;
-      queryBuilder.andWhere(
-        "(LOWER(employee.firstName) LIKE LOWER(:search) OR LOWER(employee.lastName) LIKE LOWER(:search) OR LOWER(employee.email) LIKE LOWER(:search) OR LOWER(employee.phone) LIKE LOWER(:search))",
-        { search: searchTerm },
-      );
+      // Replace + with space, trim, and normalize whitespace
+      let normalizedSearch = filters.search.replace(/\+/g, ' ');
+      normalizedSearch = normalizedSearch.trim().replace(/\s+/g, ' ');
+      console.log('Original search term:', filters.search);
+      console.log('Normalized search term:', normalizedSearch);
+
+      const words = normalizedSearch.toLowerCase().split(' ');
+      console.log('Split words:', words);
+      
+        // First word: search in first names
+  if (words.length > 0) {
+    console.log('Searching for firstName containing:', words[0]);
+    queryBuilder.andWhere(
+      `LOWER(employee.firstName) LIKE :searchFirstName`,
+      { searchFirstName: `%${words[0]}%` }
+    );
+  }
+  
+  // Second word (if present): filter by last name
+  if (words.length > 1) {
+    console.log('Filtering by lastName containing:', words[1]);
+    queryBuilder.andWhere(
+      `LOWER(employee.lastName) LIKE :searchLastName`,
+      { searchLastName: `%${words[1]}%` }
+    );
+  }
     }
 
-    // Apply pagination
+    // Pagination logic: calculates skip and limit for the query
     const page = filters.page || 1;
     const limit = filters.limit || 10;
     const skip = (page - 1) * limit;

@@ -24,11 +24,14 @@ import {
   PaginatedEmployees,
 } from "../common/interfaces/employee.interface";
 
+// EmployeesController handles all employee-related API endpoints
+// Includes CRUD operations and filter/search endpoints
 @ApiTags("employees")
 @Controller("employees")
 export class EmployeesController {
   constructor(private readonly employeesService: EmployeesService) {}
 
+  // Create a new employee
   @Post()
   @ApiOperation({ summary: "Create a new employee" })
   @ApiResponse({ status: 201, description: "Employee created successfully" })
@@ -39,6 +42,7 @@ export class EmployeesController {
     return this.employeesService.create(createEmployeeDto);
   }
 
+  // Get all employees with filters and pagination
   @Get()
   @ApiOperation({ summary: "Get all employees with filters and pagination" })
   @ApiResponse({ status: 200, description: "Employees retrieved successfully" })
@@ -80,6 +84,7 @@ export class EmployeesController {
     return this.employeesService.findAll(filters);
   }
 
+  // Get all unique departments
   @Get("departments")
   @ApiOperation({ summary: "Get all unique departments" })
   @ApiResponse({
@@ -90,6 +95,7 @@ export class EmployeesController {
     return this.employeesService.getDepartments();
   }
 
+  // Get all unique job titles
   @Get("titles")
   @ApiOperation({ summary: "Get all unique job titles" })
   @ApiResponse({
@@ -100,6 +106,7 @@ export class EmployeesController {
     return this.employeesService.getTitles();
   }
 
+  // Get all unique locations
   @Get("locations")
   @ApiOperation({ summary: "Get all unique locations" })
   @ApiResponse({ status: 200, description: "Locations retrieved successfully" })
@@ -107,6 +114,7 @@ export class EmployeesController {
     return this.employeesService.getLocations();
   }
 
+  // Get employee by ID
   @Get(":id")
   @ApiOperation({ summary: "Get employee by ID" })
   @ApiParam({ name: "id", description: "Employee ID" })
@@ -116,6 +124,7 @@ export class EmployeesController {
     return this.employeesService.findOne(id);
   }
 
+  // Update employee by ID
   @Patch(":id")
   @ApiOperation({ summary: "Update employee by ID" })
   @ApiParam({ name: "id", description: "Employee ID" })
@@ -129,6 +138,7 @@ export class EmployeesController {
     return this.employeesService.update(id, updateEmployeeDto);
   }
 
+  // Delete employee by ID
   @Delete(":id")
   @ApiOperation({ summary: "Delete employee by ID" })
   @ApiParam({ name: "id", description: "Employee ID" })
