@@ -19,6 +19,9 @@ async function bootstrap() {
     app.enableCors({
       origin: process.env.ALLOWED_ORIGINS?.split(",") || [
         "http://localhost:3000",
+        "https://client-employee-directory-next.vercel.app",
+        "https://client-employee-dire-git-2c8494-zainnaeem-invozonedevs-projects.vercel.app",
+        "https://client-employee-directory-next-q0tx3oh3j.vercel.app"
       ],
       credentials: true,
       methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
