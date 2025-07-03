@@ -37,8 +37,10 @@ import configuration from "./config/configuration";
             type: "postgres",
             url: databaseUrl,
             entities: [Employee, User],
-            synchronize: false,
+            synchronize: true, // Temporarily enable for schema sync
             logging: false,
+            migrations: ["src/database/migrations/*.ts"],
+            migrationsRun: true,
             ssl: {
               rejectUnauthorized: false,
             },
