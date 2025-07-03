@@ -109,10 +109,17 @@ public/
 .yarn/install-state.gz
 .pnp.*
 
-# Database files
+# Database files - SQLite and other local databases
 *.db
 *.sqlite
 *.sqlite3
+*.db-journal
+*.db-wal
+*.db-shm
+
+# Auto-generated SQLite files (for cold start)
+employee_directory.db
+employee_directory
 
 # Logs
 logs/
@@ -150,8 +157,6 @@ dist/
 .env.development.local
 .env.test.local
 .env.production.local
-.employee_directory
-.employee_directory.db
 
 # Allow these files to be tracked (important for deployment)
 !env.production.template

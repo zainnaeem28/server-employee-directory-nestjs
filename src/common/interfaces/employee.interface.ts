@@ -8,7 +8,7 @@ export interface Employee {
   title: string;
   location: string;
   avatar: string | null;
-  hireDate: string;
+  hireDate: Date;
   salary: number;
   manager?: string;
   isActive: boolean;

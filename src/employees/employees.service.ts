@@ -189,7 +189,7 @@ export class EmployeesService {
         ...createEmployeeDto,
         avatar,
         customAvatar,
-        hireDate: new Date().toISOString().split("T")[0],
+        hireDate: new Date(),
         isActive: true,
       };
 

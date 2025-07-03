@@ -21,7 +21,8 @@ describe("EmployeesService", () => {
     title: "Software Engineer",
     location: "New York, USA",
     avatar: "https://example.com/avatar.jpg",
-    hireDate: "2023-01-15",
+    customAvatar: null,
+    hireDate: new Date("2023-01-15"),
     salary: 75000,
     manager: "Jane Smith",
     isActive: true,
@@ -144,7 +145,7 @@ describe("EmployeesService", () => {
       expect(repository.create).toHaveBeenCalledWith({
         ...createDto,
         avatar: expect.any(String),
-        hireDate: expect.any(String),
+        hireDate: expect.any(Date),
         isActive: true,
       });
       expect(result).toEqual(mockEmployee);

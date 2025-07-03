@@ -40,7 +40,7 @@ export class Employee {
   avatar: string | null;
 
   @Column({ type: 'varchar', length: 500, nullable: true })
-  customAvatar?: string | null;
+  customAvatar: string | null;
 
   @Column({ type: "date" })
   hireDate: Date;
