@@ -60,7 +60,13 @@ export class CreateEmployeesTable1710000000000 implements MigrationInterface {
             name: "avatar",
             type: "varchar",
             length: "500",
-            isNullable: false,
+            isNullable: true,
+          },
+          {
+            name: "customAvatar",
+            type: "varchar",
+            length: "500",
+            isNullable: true,
           },
           {
             name: "hireDate",
