@@ -36,8 +36,11 @@ export class Employee {
   @Column({ length: 255 })
   location: string;
 
-  @Column({ length: 500 })
-  avatar: string;
+  @Column({ type: 'varchar', length: 500, nullable: true })
+  avatar: string | null;
+
+  @Column({ type: 'varchar', length: 500, nullable: true })
+  customAvatar?: string | null;
 
   @Column({ type: "text" })
   hireDate: string;

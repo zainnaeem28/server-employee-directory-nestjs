@@ -7,7 +7,7 @@ export interface Employee {
   department: string;
   title: string;
   location: string;
-  avatar: string;
+  avatar: string | null;
   hireDate: string;
   salary: number;
   manager?: string;
@@ -15,6 +15,7 @@ export interface Employee {
   createdAt: Date;
   updatedAt: Date;
   fullName?: string;
+  customAvatar?: string | null;
 }
 
 export interface CreateEmployeeDto {
@@ -27,6 +28,8 @@ export interface CreateEmployeeDto {
   location: string;
   salary: number;
   manager?: string;
+  avatar?: string | null;
+  customAvatar?: string | null;
 }
 
 export interface UpdateEmployeeDto {
@@ -40,6 +43,8 @@ export interface UpdateEmployeeDto {
   salary?: number;
   manager?: string;
   isActive?: boolean;
+  avatar?: string | null;
+  customAvatar?: string | null;
 }
 
 export interface EmployeeFilters {

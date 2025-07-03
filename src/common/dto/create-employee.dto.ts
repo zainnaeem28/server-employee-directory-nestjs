@@ -130,4 +130,12 @@ export class CreateEmployeeDto {
   @IsString()
   @MaxLength(100)
   manager?: string;
+
+  @ApiPropertyOptional({
+    description: "Custom avatar URL for the employee (optional)",
+    example: "https://randomuser.me/api/portraits/men/1.jpg",
+  })
+  @IsOptional()
+  @IsString()
+  customAvatar?: string;
 }

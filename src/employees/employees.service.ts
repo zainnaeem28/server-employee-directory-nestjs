@@ -175,9 +175,20 @@ export class EmployeesService {
         return { error: `Employee with email ${createEmployeeDto.email} already exists` };
       }
 
+      let avatar: string;
+      let customAvatar: string | null = null;
+      if (createEmployeeDto.customAvatar) {
+        avatar = createEmployeeDto.customAvatar;
+        customAvatar = createEmployeeDto.customAvatar;
+      } else {
+        avatar = `https://ui-avatars.com/api/?name=${createEmployeeDto.firstName}+${createEmployeeDto.lastName}&size=200`;
+        customAvatar = null;
+      }
+
       const employeeData = {
         ...createEmployeeDto,
-        avatar: `https://ui-avatars.com/api/?name=${createEmployeeDto.firstName}+${createEmployeeDto.lastName}&size=200`,
+        avatar,
+        customAvatar,
         hireDate: new Date().toISOString().split("T")[0],
         isActive: true,
       };
@@ -211,6 +222,22 @@ export class EmployeesService {
         if (emailExists && emailExists.id !== id) {
           return { error: `Employee with email ${updateEmployeeDto.email} already exists` };
         }
+      }
+
+      // If customAvatar is an empty string, set it to null to clear the field in the database
+      if (updateEmployeeDto.customAvatar === '') {
+        updateEmployeeDto.customAvatar = null;
+      }
+
+      // Always update avatar and customAvatar fields
+      if (typeof updateEmployeeDto.customAvatar !== 'undefined' && updateEmployeeDto.customAvatar) {
+        updateEmployeeDto.avatar = updateEmployeeDto.customAvatar;
+      } else {
+        // Use updated firstName/lastName if provided, otherwise fallback to existingEmployee
+        const firstName = updateEmployeeDto.firstName || existingEmployee.firstName;
+        const lastName = updateEmployeeDto.lastName || existingEmployee.lastName;
+        updateEmployeeDto.avatar = `https://ui-avatars.com/api/?name=${firstName}+${lastName}&size=200`;
+        updateEmployeeDto.customAvatar = null;
       }
 
       const updatedEmployee = await this.employeesRepository.update(
