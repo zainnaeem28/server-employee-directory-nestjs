@@ -42,8 +42,8 @@ export class Employee {
   @Column({ type: 'varchar', length: 500, nullable: true })
   customAvatar?: string | null;
 
-  @Column({ type: "text" })
-  hireDate: string;
+  @Column({ type: "date" })
+  hireDate: Date;
 
   @Column({ type: "numeric", precision: 10, scale: 2 })
   salary: number;
