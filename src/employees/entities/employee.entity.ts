@@ -45,7 +45,13 @@ export class Employee {
   @Column({ type: "date" })
   hireDate: Date;
 
-  @Column({ type: "numeric", precision: 10, scale: 2 })
+  @Column({ type: "numeric", precision: 10, scale: 2, transformer: {
+    to: (value: number) => value,
+    from: (value: string | number) => {
+      if (value === null || value === undefined) return 0;
+      return typeof value === 'string' ? parseFloat(value) : value;
+    }
+  }})
   salary: number;
 
   @Column({ length: 100, nullable: true })

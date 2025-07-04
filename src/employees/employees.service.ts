@@ -323,8 +323,15 @@ export class EmployeesService {
       const departmentsCount = departments.size;
       
       // Calculate average salary
-      const totalSalary = allEmployees.reduce((sum, emp) => sum + emp.salary, 0);
-      const averageSalary = Math.round(totalSalary / totalEmployees);
+      const employeesWithSalary = allEmployees.filter(emp =>
+        emp.salary != null && !isNaN(Number(emp.salary)) && Number(emp.salary) > 0
+      );
+      const totalSalary = employeesWithSalary.reduce((sum, emp) =>
+        sum + Number(emp.salary), 0
+      );
+      const averageSalary = employeesWithSalary.length > 0
+        ? Math.round(totalSalary / employeesWithSalary.length)
+        : null;
       
       // Calculate active employees
       const activeEmployees = allEmployees.filter(emp => emp.isActive);
