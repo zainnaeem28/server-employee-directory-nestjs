@@ -142,6 +142,10 @@ export class EmployeesRepository {
     return this.repository.count();
   }
 
+  async findAll(): Promise<Employee[]> {
+    return this.repository.find();
+  }
+
   async seedEmployees(employees: Partial<Employee>[]): Promise<void> {
     await this.repository.save(employees);
   }

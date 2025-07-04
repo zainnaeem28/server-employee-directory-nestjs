@@ -310,4 +310,66 @@ export class EmployeesService {
       throw error;
     }
   }
+
+  async getStats() {
+    try {
+      const allEmployees = await this.employeesRepository.findAll();
+      
+      // Calculate total employees
+      const totalEmployees = allEmployees.length;
+      
+      // Calculate departments count
+      const departments = new Set(allEmployees.map(emp => emp.department));
+      const departmentsCount = departments.size;
+      
+      // Calculate average salary
+      const totalSalary = allEmployees.reduce((sum, emp) => sum + emp.salary, 0);
+      const averageSalary = Math.round(totalSalary / totalEmployees);
+      
+      // Calculate active employees
+      const activeEmployees = allEmployees.filter(emp => emp.isActive);
+      const activeCount = activeEmployees.length;
+      
+      // Calculate location stats
+      const locationCounts = allEmployees.reduce((acc, emp) => {
+        acc[emp.location] = (acc[emp.location] || 0) + 1;
+        return acc;
+      }, {} as Record<string, number>);
+      
+      const sortedLocations = Object.entries(locationCounts)
+        .sort(([,a], [,b]) => b - a);
+      
+      const topLocation = sortedLocations[0];
+      const topLocationPercent = Math.round((topLocation[1] / totalEmployees) * 100);
+      
+      // Calculate job title stats
+      const titleCounts = allEmployees.reduce((acc, emp) => {
+        acc[emp.title] = (acc[emp.title] || 0) + 1;
+        return acc;
+      }, {} as Record<string, number>);
+      
+      const sortedTitles = Object.entries(titleCounts)
+        .sort(([,a], [,b]) => b - a);
+      
+      return {
+        totalEmployees,
+        departments: departmentsCount,
+        topLocation: {
+          name: topLocation[0],
+          count: topLocation[1],
+          percent: topLocationPercent
+        },
+        locations: sortedLocations.map(([name, value]) => ({ name, value })),
+        averageSalary,
+        activeEmployees: {
+          active: activeCount,
+          total: totalEmployees
+        },
+        jobTitleTrends: sortedTitles.map(([title, value]) => ({ title, value }))
+      };
+    } catch (error) {
+      this.logger.error("Error getting stats:", error);
+      throw error;
+    }
+  }
 }

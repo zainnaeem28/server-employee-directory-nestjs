@@ -158,6 +158,36 @@ dist/
 .env.test.local
 .env.production.local
 
+# Husky
+.husky/
+
+# Lint-staged
+.lintstagedrc*
+
+# Prettier
+.prettierignore
+
+# Storybook
+storybook-static
+
+# Cypress
+cypress/videos/
+cypress/screenshots/
+
+# Playwright
+test-results/
+playwright-report/
+playwright/.cache/
+
+# Turbo
+.turbo
+
+# Sentry
+.sentryclirc
+
+# Jest
+.jest/
+
 # Allow these files to be tracked (important for deployment)
 !env.production.template
 !DEPLOYMENT.md

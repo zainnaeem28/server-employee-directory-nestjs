@@ -121,6 +121,14 @@ export class EmployeesController {
     return this.employeesService.getLocations();
   }
 
+  // Get employee statistics
+  @Get("stats")
+  @ApiOperation({ summary: "Get employee statistics" })
+  @ApiResponse({ status: 200, description: "Statistics retrieved successfully" })
+  async getStats() {
+    return this.employeesService.getStats();
+  }
+
   // Get employee by ID
   @Get(":id")
   @ApiOperation({ summary: "Get employee by ID" })
