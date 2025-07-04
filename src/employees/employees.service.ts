@@ -178,14 +178,14 @@ export class EmployeesService {
     }
   }
 
-  async create(createEmployeeDto: CreateEmployeeDto): Promise<Employee | { error: string }> {
+  async create(createEmployeeDto: CreateEmployeeDto): Promise<Employee> {
     try {
       // Check if email already exists
       const existingEmployee = await this.employeesRepository.findByEmail(
         createEmployeeDto.email,
       );
       if (existingEmployee) {
-        return { error: `Employee with email ${createEmployeeDto.email} already exists` };
+        throw new ConflictException(`Employee with email ${createEmployeeDto.email} already exists`);
       }
 
       let avatar: string;
@@ -221,7 +221,7 @@ export class EmployeesService {
   async update(
     id: string,
     updateEmployeeDto: UpdateEmployeeDto,
-  ): Promise<Employee | { error: string }> {
+  ): Promise<Employee> {
     try {
       // Check if employee exists
       const existingEmployee = await this.employeesRepository.findOne(id);
@@ -233,7 +233,7 @@ export class EmployeesService {
       if (updateEmployeeDto.email) {
         const emailExists = await this.employeesRepository.findByEmail(updateEmployeeDto.email);
         if (emailExists && emailExists.id !== id) {
-          return { error: `Employee with email ${updateEmployeeDto.email} already exists` };
+          throw new ConflictException(`Employee with email ${updateEmployeeDto.email} already exists`);
         }
       }
 

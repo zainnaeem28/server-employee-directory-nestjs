@@ -180,9 +180,31 @@ The backend will automatically deploy to Vercel and be available at:
 2. **Deploy to Vercel** - your frontend will be available at:
 `https://client-employee-directory-next.vercel.app`
 
-## 🧪 Testing
+## 🔒 Security
 
-### Backend Tests
+### Environment Variables
+The following environment variables are **required** for the application to function properly:
+
+- `JWT_SECRET`: A strong, unique secret key for JWT token signing
+- `DATABASE_URL`: Database connection string (required in production)
+
+### Security Features
+- **JWT Authentication**: Secure token-based authentication
+- **Role-based Access Control**: User roles and permissions
+- **Input Validation**: Comprehensive validation using class-validator
+- **CORS Protection**: Configurable cross-origin resource sharing
+- **Rate Limiting**: Protection against brute force attacks
+- **Security Headers**: Helmet middleware for additional security
+- **Error Handling**: Secure error responses that don't leak sensitive information
+
+### Best Practices
+1. **Never commit secrets** to version control
+2. **Use strong, unique JWT secrets** in production
+3. **Regularly rotate** JWT secrets
+4. **Monitor** application logs for security events
+5. **Keep dependencies** updated to latest secure versions
+
+## 🧪 Testing
 ```bash
 # Run all tests
 npm run test

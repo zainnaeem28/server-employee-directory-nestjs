@@ -13,7 +13,9 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     const jwtSecret =
       configService.get<string>("app.security.jwtSecret") ||
       configService.get<string>("JWT_SECRET") ||
-      "your-super-secret-jwt-key-change-in-production";
+      (() => {
+        throw new Error('JWT_SECRET is required');
+      })();
 
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),

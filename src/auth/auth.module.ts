@@ -18,7 +18,9 @@ import { UsersModule } from "../users/users.module";
         const jwtSecret =
           configService.get<string>("app.security.jwtSecret") ||
           configService.get<string>("JWT_SECRET") ||
-          "your-super-secret-jwt-key-change-in-production";
+          (() => {
+            throw new Error('JWT_SECRET is required');
+          })();
         const jwtExpiresIn =
           configService.get<string>("app.security.jwtExpiresIn") ||
           configService.get<string>("JWT_EXPIRES_IN") ||

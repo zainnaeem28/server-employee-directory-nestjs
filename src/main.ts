@@ -19,7 +19,20 @@ import { AppModule } from "./app.module";
 import { GlobalExceptionFilter } from "./common/filters/global-exception.filter";
 import { LoggingInterceptor } from "./common/interceptors/logging.interceptor";
 
+// Validate required environment variables
+function validateEnvironmentVariables() {
+  const requiredVars = ['JWT_SECRET'];
+  const missingVars = requiredVars.filter(varName => !process.env[varName]);
+  
+  if (missingVars.length > 0) {
+    throw new Error(`Missing required environment variables: ${missingVars.join(', ')}`);
+  }
+}
+
 async function bootstrap() {
+  // Validate environment variables before starting the app
+  validateEnvironmentVariables();
+  
   const logger = new Logger("Bootstrap");
 
   try {
